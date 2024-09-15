@@ -1,0 +1,27 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Bowncy Bowncy",
+    "description": "Minecraft Bowncy Game",
+    "uuid": "010ddfc2-4558-4b7b-a6d8-f1130f058e5d",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 12, 0]
+  },
+  "capabilities": ["script_eval"],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "1.13.0"
+    }
+  ],
+  "modules": [
+    {
+      "description": "Bowncy Game Scripts",
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/js/main.js",
+      "uuid": "12142fbb-0e9d-4aa7-8668-11dccd7383b3",
+      "version": [1, 0, 0]
+    }
+  ]
+}
