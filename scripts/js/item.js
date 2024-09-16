@@ -17,11 +17,7 @@ export const BlueEquipment = {
     Feet: "triplepeace:blue_feet",
 };
 /** 戦闘アイテム */
-export const BattleItem = [
-    "triplepeace:bowns_bow",
-    "triplepeace:bowns_sword",
-    "triplepeace:bowns_arrow",
-];
+export const BattleItem = ["minecraft:bow"];
 /** 戦闘アイテムのリスト */
 const BattleItems = [new ItemStack(BattleItem[0], 1)];
 export class Item {

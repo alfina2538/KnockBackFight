@@ -22,11 +22,7 @@ export const BlueEquipment = {
 type BlueEquipment = (typeof BlueEquipment)[keyof typeof BlueEquipment];
 
 /** 戦闘アイテム */
-export const BattleItem = [
-  "triplepeace:bowns_bow",
-  "triplepeace:bowns_sword",
-  "triplepeace:bowns_arrow",
-] as const;
+export const BattleItem = ["minecraft:bow"] as const;
 type BattleItem = (typeof BattleItem)[keyof typeof BattleItem];
 
 /** 戦闘アイテムのリスト */

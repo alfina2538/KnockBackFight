@@ -8,6 +8,7 @@ import {
   GameMode,
   EntityEquippableComponent,
   EntityInventoryComponent,
+  ItemLockMode,
 } from "@minecraft/server";
 import { Team, TeamItem } from "./team";
 import { RedEquipment, BlueEquipment } from "./item";
@@ -214,40 +215,34 @@ export class BPlayer {
     ) as EntityEquippableComponent;
     switch (this.team) {
       case Team.Red:
-        equipment?.setEquipment(
-          EquipmentSlot.Head,
-          new ItemStack(RedEquipment.Head),
-        );
-        equipment?.setEquipment(
-          EquipmentSlot.Chest,
-          new ItemStack(RedEquipment.Chest),
-        );
-        equipment?.setEquipment(
-          EquipmentSlot.Legs,
-          new ItemStack(RedEquipment.Legs),
-        );
-        equipment?.setEquipment(
-          EquipmentSlot.Feet,
-          new ItemStack(RedEquipment.Feet),
-        );
+        const r_head = new ItemStack(RedEquipment.Head);
+        const r_chest = new ItemStack(RedEquipment.Chest);
+        const r_legs = new ItemStack(RedEquipment.Legs);
+        const r_feet = new ItemStack(RedEquipment.Feet);
+        r_head.lockMode = ItemLockMode.slot;
+        r_chest.lockMode = ItemLockMode.slot;
+        r_legs.lockMode = ItemLockMode.slot;
+        r_feet.lockMode = ItemLockMode.slot;
+
+        equipment?.setEquipment(EquipmentSlot.Head, r_head);
+        equipment?.setEquipment(EquipmentSlot.Chest, r_chest);
+        equipment?.setEquipment(EquipmentSlot.Legs, r_legs);
+        equipment?.setEquipment(EquipmentSlot.Feet, r_feet);
         break;
       case Team.Blue:
-        equipment?.setEquipment(
-          EquipmentSlot.Head,
-          new ItemStack(BlueEquipment.Head),
-        );
-        equipment?.setEquipment(
-          EquipmentSlot.Chest,
-          new ItemStack(BlueEquipment.Chest),
-        );
-        equipment?.setEquipment(
-          EquipmentSlot.Legs,
-          new ItemStack(BlueEquipment.Legs),
-        );
-        equipment?.setEquipment(
-          EquipmentSlot.Feet,
-          new ItemStack(BlueEquipment.Feet),
-        );
+        const b_head = new ItemStack(BlueEquipment.Head);
+        const b_chest = new ItemStack(BlueEquipment.Chest);
+        const b_legs = new ItemStack(BlueEquipment.Legs);
+        const b_feet = new ItemStack(BlueEquipment.Feet);
+        b_head.lockMode = ItemLockMode.slot;
+        b_chest.lockMode = ItemLockMode.slot;
+        b_legs.lockMode = ItemLockMode.slot;
+        b_feet.lockMode = ItemLockMode.slot;
+
+        equipment?.setEquipment(EquipmentSlot.Head, b_head);
+        equipment?.setEquipment(EquipmentSlot.Chest, b_chest);
+        equipment?.setEquipment(EquipmentSlot.Legs, b_legs);
+        equipment?.setEquipment(EquipmentSlot.Feet, b_feet);
         break;
       case Team.Viewer:
         equipment?.setEquipment(EquipmentSlot.Head, undefined);

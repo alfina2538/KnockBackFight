@@ -1,6 +1,7 @@
 import {
   DisplaySlotId,
   EntityInventoryComponent,
+  ItemLockMode,
   ObjectiveSortOrder,
   ScoreboardObjective,
   world,
@@ -32,9 +33,16 @@ export class TeamItemInit {
     const inventory = player.getComponent(
       "inventory",
     ) as EntityInventoryComponent;
-    inventory.container?.setItem(0, new ItemStack(TeamItem.Red));
-    inventory.container?.setItem(1, new ItemStack(TeamItem.Blue));
-    inventory.container?.setItem(2, new ItemStack(TeamItem.Viewer));
+    const red = new ItemStack(TeamItem.Red);
+    const blue = new ItemStack(TeamItem.Blue);
+    const viewer = new ItemStack(TeamItem.Viewer);
+    red.lockMode = ItemLockMode.slot;
+    blue.lockMode = ItemLockMode.slot;
+    viewer.lockMode = ItemLockMode.slot;
+
+    inventory.container?.setItem(0, red);
+    inventory.container?.setItem(1, blue);
+    inventory.container?.setItem(2, viewer);
   }
 }
 
