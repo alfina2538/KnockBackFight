@@ -1,4 +1,4 @@
-import { world, system, Vector3 } from "@minecraft/server";
+import { world, system, Vector3, GameMode } from "@minecraft/server";
 import { FieldRanges, StartButton } from "./field_point";
 import { BPlayer, Playeres } from "./player";
 import { GameManager, MODE } from "./gamemanager";
@@ -18,23 +18,26 @@ world.afterEvents.worldInitialize.subscribe(() => {
     world.gameRules.doEntityDrops = false;
     system.runJob(FieldData.GetEnabledPoint());
   });
+  system.run(() => {
+    Playeres.players = [];
+    world.getPlayers().forEach((p) => {
+      Playeres.Add(p);
+    });
+  });
 });
 
 // player world spawn
 world.afterEvents.playerSpawn.subscribe((ev) => {
-  switch (gm.mode) {
-    case MODE.Wait:
-      if (ev.initialSpawn) {
-        Playeres.Add(ev.player);
-        TeamItemInit.Add(ev.player);
-      }
-      break;
-    case MODE.Ingame:
-      if (ev.initialSpawn) {
-        Playeres.Add(ev.player);
-      }
-      gm.ChangeViewer(ev.player);
-      break;
+  if (gm.mode === MODE.Wait) {
+    if (ev.initialSpawn) {
+      Playeres.Add(ev.player);
+      TeamItemInit.Add(ev.player);
+    }
+  } else {
+    if (ev.initialSpawn) {
+      Playeres.Add(ev.player);
+    }
+    gm.ChangeViewer(ev.player);
   }
 });
 
@@ -55,6 +58,7 @@ system.runInterval(() => {
   }
 }, 1);
 
+// entity die
 world.afterEvents.entityDie.subscribe((et) => {
   const player = Playeres.players.find(
     (p) => p.player.name === et.deadEntity.nameTag,
@@ -70,6 +74,7 @@ world.afterEvents.entityDie.subscribe((et) => {
       case Team.Viewer:
         break;
     }
+    player.player.setGameMode(GameMode.spectator);
   }
 });
 

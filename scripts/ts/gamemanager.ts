@@ -106,13 +106,13 @@ export class GameManager {
     } else {
       system.run(() => {
         this.count.Start();
-        world.gameRules.pvp = true;
         Playeres.ItemClearAll();
         Playeres.FieldTeleport();
 
         system.runTimeout(() => {
+          world.gameRules.pvp = true;
           this.ChangeMode();
-        }, 14);
+        }, TicksPerSecond * 14);
       });
     }
   }

@@ -114,20 +114,37 @@ export class BPlayer {
    * テレポート
    */
   Teleport() {
-    if (this.fieldTPPoint !== undefined) {
-      if (this.team === Team.Red) {
-        const rand = GenerateRandNum(0, FieldData.enabled_point.length);
-        this.fieldTPPoint = FieldData.enabled_point[rand];
-        this.player.teleport(this.fieldTPPoint);
-      } else if (this.team === Team.Blue) {
-        const rand = GenerateRandNum(0, FieldData.enabled_point.length);
-        this.fieldTPPoint = FieldData.enabled_point[rand];
-        this.player.teleport(this.fieldTPPoint);
-      } else {
-        this.player.setGameMode(GameMode.spectator);
-        this.player.teleport(FieldCenter);
+    system.run(() => {
+      if (this.fieldTPPoint !== undefined) {
+        // 赤チームのテレポート
+        if (this.team === Team.Red) {
+          const red_field = FieldData.enabled_point.filter((f) => {
+            RedField.XStart <= f.x &&
+              f.x <= RedField.XEnd &&
+              RedField.ZStart <= f.z &&
+              f.z <= RedField.ZEnd;
+          });
+          const rand = GenerateRandNum(0, red_field.length);
+          this.fieldTPPoint = red_field[rand];
+          this.player.teleport(this.fieldTPPoint);
+        } else if (this.team === Team.Blue) {
+          // 青チームのテレポート
+          const blue_field = FieldData.enabled_point.filter((f) => {
+            BlueField.XStart <= f.x &&
+              f.x <= BlueField.XEnd &&
+              BlueField.ZStart <= f.z &&
+              f.z <= BlueField.ZEnd;
+          });
+          const rand = GenerateRandNum(0, blue_field.length);
+          this.fieldTPPoint = blue_field[rand];
+          this.player.teleport(this.fieldTPPoint);
+        } else {
+          // 観戦者のテレポート
+          this.player.setGameMode(GameMode.spectator);
+          this.player.teleport(FieldCenter);
+        }
       }
-    }
+    });
   }
 
   /**
