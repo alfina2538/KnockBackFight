@@ -5,7 +5,7 @@ import {
   GameMode,
   Player,
 } from "@minecraft/server";
-import { Team, TeamScores, TeamName } from "./team";
+import { Team, TeamScores, TeamName, TeamItemInit } from "./team";
 import { Playeres } from "./player";
 import { Count } from "./countdown";
 import { FieldCenter, Lobby, OVER_WORLD, StartButton } from "./field_point";
@@ -84,8 +84,6 @@ export class GameManager {
     const red = this.teamNum.GetScore(TeamName.Red);
     const blue = this.teamNum.GetScore(TeamName.Blue);
 
-    this.lock = true;
-
     if (red === undefined || blue === undefined) {
       system.run(() => {
         Playeres.players.forEach((p) => {
@@ -97,23 +95,23 @@ export class GameManager {
       return;
     }
 
-    if (red < 1 && blue < 1) {
+    if (red < 1 || blue < 1) {
       system.run(() => {
         Playeres.players.forEach((p) => {
           p.player.sendMessage("各チーム1人以上必要です");
         });
       });
     } else {
+      this.lock = true;
       system.run(() => {
         this.count.Start();
         Playeres.ItemClearAll();
         Playeres.FieldTeleport();
-
-        system.runTimeout(() => {
-          world.gameRules.pvp = true;
-          this.ChangeMode();
-        }, TicksPerSecond * 14);
       });
+      system.runTimeout(() => {
+        world.gameRules.pvp = true;
+        this.ChangeMode();
+      }, TicksPerSecond * 14);
     }
   }
 
@@ -125,10 +123,16 @@ export class GameManager {
       if (this.teamWin !== WinFlag.None) {
         this.teamWin = WinFlag.None;
         this.mode = MODE.Wait;
+        this.lock = false;
         Playeres.ResetTeleportPoint();
         world.gameRules.pvp = false;
+        this.teamNum.SetScore(TeamName.Red, 0);
+        this.teamNum.SetScore(TeamName.Blue, 0);
         system.runTimeout(() => {
           Playeres.players.forEach((player) => {
+            player.ItemClear();
+
+            TeamItemInit.Add(player.player);
             player.TeleportToPos(Lobby);
             player.ChangeTeam(Team.Viewer);
             player.ChangeGameMode(GameMode.adventure);
