@@ -88,6 +88,7 @@ world.afterEvents.buttonPush.subscribe((ev) => {
 // debug command
 system.afterEvents.scriptEventReceive.subscribe((ev) => {
   switch (ev.id) {
+    // 特定プレイヤーにチーム変更アイテムを付与
     case DebugCommands.AddTeamItem:
       const player = Playeres.players.find((p) => p.player.name === ev.message);
       if (player !== undefined) {
@@ -96,16 +97,19 @@ system.afterEvents.scriptEventReceive.subscribe((ev) => {
       }
       break;
 
+    // チーム変更アイテムを全プレイヤーに付与
     case DebugCommands.AddTeamItemAll:
       const players = Playeres.players.forEach((p) => {
         TeamItemInit.Add(p.player);
       });
       break;
 
+    // プレイヤーの一覧を表示
     case DebugCommands.ShowPlayerList:
       Playeres.players.forEach((p) => world.sendMessage(p.player.name));
       break;
 
+    // 指定インデックスのプレイヤーの座標を取得
     case DebugCommands.ShowPlayerFieldPos:
       const p = Playeres.players.find((p) => p.player.name === ev.message);
       if (p !== undefined) {
@@ -114,6 +118,7 @@ system.afterEvents.scriptEventReceive.subscribe((ev) => {
       }
       break;
 
+    // 全プレイヤーをゲームに追加
     case DebugCommands.AddAllPlayers:
       Playeres.players = [];
       world.getPlayers().forEach((p) => {
@@ -121,10 +126,12 @@ system.afterEvents.scriptEventReceive.subscribe((ev) => {
       });
       break;
 
+    // フィールドデータの再ロード
     case DebugCommands.ReloadFieldData:
       system.runJob(FieldData.GetEnabledPoint());
       break;
 
+    // 指定インデックスのフィールド座標を表示
     case DebugCommands.ShowFieldPoint:
       system.run(() => {
         world.sendMessage(`point num: ${FieldData.enabled_point.length}`);
@@ -134,6 +141,7 @@ system.afterEvents.scriptEventReceive.subscribe((ev) => {
       });
       break;
 
+    // あるふぃなをランダムなフィールド座標にテレポート
     case DebugCommands.TeleportField:
       const point = GenerateRandNum(0, FieldData.enabled_point.length);
       const alfina = world.getPlayers().find((p) => p.name === "alfina2538");
@@ -142,6 +150,7 @@ system.afterEvents.scriptEventReceive.subscribe((ev) => {
       }
       break;
 
+    // フィールドの範囲を表示
     case DebugCommands.ShowFieldRange:
       world.sendMessage(
         `x : ${FieldRanges.XStart}, ${FieldRanges.XEnd} / z: ${FieldRanges.ZStart}, ${FieldRanges.ZEnd}`,
@@ -149,6 +158,7 @@ system.afterEvents.scriptEventReceive.subscribe((ev) => {
 
       break;
 
+    // 現在のゲームモードを表示
     case DebugCommands.CheckGameMode:
       world.sendMessage(`gamemode: ${gm.mode}`);
       break;
